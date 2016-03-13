@@ -1,0 +1,85 @@
+---
+title: "Machine Learning Weigh Lifting Coursera R JH"
+author: "garyf"
+date: "March 9-13, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,  cache=TRUE)
+library(caret)
+```
+
+## Introduction:
+A series of experiments were designed to capture information from fitbit and related motion sensor devises. Five(5) sets of data were collected on the proper exercise methods (1), and four(4) for known form errors. The question being asked is, "Is it possible to determine electronically if an exercise is being done properly?" Source data generously supplied by http://groupware.les.inf.puc-rio.br/har  and the Human Activity Recogition Project, exercise enthusiasts and tech geeks who like to record their activites with Jawbone, fitbit and other electronic devices.
+
+
+## Data exploration
+The data consisted of 160 data points for over 19,000 observations. A quick overview indicated that for some variables, no data was available and for others, only a small set of the samples had data. Attempts to model all the data resulted in a failure to generate the model. It was desided to eliminate the columns with NA or were only a small set of data when pared down to 60 variables. I was able to split this data, 70/30 training testing sets and get models for random forest and gbm models. Generally 41 variables were used, there was 100% matching predictions on the test set with 500 trees. I realized after a few runs, my prediction included the ID marker, on sorted data, that was a source of false accuriacy. I removed this column from consideration. I might be overfitting the data, can I get reasonable predictions with 15-20 variables and less than 200 trees?
+
+  
+## setwd('J:/My_MachineLearning_Project')
+```{r buildModel_RunPreciction  } 
+
+library(caret) 
+  
+ removedCols <- c( 'id', 'user_name' )
+keepColumns1 <-c(	'raw_timestamp_part_1',	'raw_timestamp_part_2',	'cvtd_timestamp',	'roll_forearm',	'pitch_forearm',   'new_window',	'num_window',	'roll_belt', 'pitch_belt',	'yaw_belt')
+keepColumns2 <-c( 'total_accel_belt', 'gyros_belt_x',	'gyros_belt_y',	'gyros_belt_z', 	'yaw_forearm', 'total_accel_forearm' , 'total_accel_dumbbell', 'accel_belt_x',	'accel_belt_y',	'accel_belt_z',	'magnet_belt_x','magnet_belt_y')
+keepColumns3 <-c( 'accel_arm_z',	'magnet_arm_x','magnet_belt_z','roll_arm', 'roll_dumbbell',	'pitch_dumbbell',	'pitch_arm',	'yaw_arm',	'total_accel_arm', 'gyros_arm_x',	'gyros_arm_y',	'gyros_arm_z',	'accel_arm_x', 'accel_arm_y')
+keepColumns4 <-c( 	'magnet_arm_y',	'magnet_arm_z', 'gyros_dumbbell_x',	'gyros_dumbbell_y', 'gyros_dumbbell_z',	'accel_dumbbell_x', 'accel_dumbbell_y',	'accel_dumbbell_z',	'magnet_dumbbell_x'	,'magnet_dumbbell_y',	'magnet_dumbbell_z')
+keepColumns5 <-c( 	'yaw_dumbbell', 'gyros_forearm_x',	'gyros_forearm_y',	'gyros_forearm_z',	'accel_forearm_x',	'accel_forearm_y',	'accel_forearm_z',	'magnet_forearm_x',	'magnet_forearm_y',	'magnet_forearm_z',	'classe')
+keepColumnsAll <- c( keepColumns1,keepColumns2,keepColumns3,keepColumns4,keepColumns5 )
+
+trainingData <- read.csv('J:/My_MachineLearning_Project/pml-training.csv')
+validationData <- read.csv('J:/My_MachineLearning_Project/pml-testing.csv')
+InTrain <- createDataPartition(trainingData$classe, p=.7, list=FALSE)
+
+liveTraining <- trainingData[InTrain, keepColumnsAll]
+liveTest <-  trainingData[-InTrain, keepColumnsAll] 
+
+# newTrainingData <- trainingData[ , keepColumnsAll]
+# write.csv(newTrainingData, 'E:/My_MachineLearning_Project/pml-training-clean.csv')
+# rm(trainingData)
+
+
+
+#looking good
+learnModelRF <- train(classe ~., data=liveTraining, method='rf')
+predictionRF <- predict(learnModelRF,   liveTest)
+
+cmRF <- confusionMatrix(predictionRF, liveTest$classe)
+
+valPredict <- predict(learnModelRF, validationData)
+valRF <- confusionMatrix(predictionRF, validationData$classe)
+
+cmRF
+valRF
+
+savePredictions = function(x){
+  n = length(x)
+  for(i in 1:n){
+    filename= paste0("id_",i,".txt")
+    write.table(x[i], file=filename,quote=FALSE,row.names=FALSE,col.names=FALSE)
+  }
+  
+}
+```
+
+## R Random Forest Result
+## My test set
+The random forest my test prediction result. Figure 1: My test subset `r cmRF$table`
+
+## Coursera Validation Set
+The random forest final prediction result `r valRF$table` for the reserved Test set from The Class.
+ 
+The precictions for the validation (Final Test set are as follows: `r valPredict`
+ 
+ With 40 variables (id removed) the predicve accuracy is 99.97% with only 2 errors in categories(classe) "C" and "D"
+ ## Variables relative importantance for classification.
+ ```{r relativeImportance include=TRUE}
+ knitr::opts_chunk$set(echo = FALSE)
+ relImportent <- varImp(learnModelRF)
+ plot(relImportent)
+ ```
+ ## After removing the id and names columns, these were the columns used for training the model. `r keepColumnsAll`
