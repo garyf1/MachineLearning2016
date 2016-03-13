@@ -172,8 +172,42 @@ Figure 1: My test subset    <br>
 <p>The precictions for the validation (Final Test set are as follows: B, A, B, A, A, E, D, B, A, A, B, C, B, A, E, E, A, B, B, B</p>
 <p>With 40 variables (id removed) the predicve accuracy is 99.97% with only 2 errors in categories(classe) “C” and “D”</p>
 </div>
+<br>
+<img src='RelativeImportance.png' />
+<br>
 
-
+<div id='R-Prediction-Columns'>
+<h2>R Prediction Columns</h2>
+<table>
+<thead>
+<th>
+<tr>
+<th colspan='3' border='0'>
+	## After removing the id and names columns, these were the columns used for training the model.  <br>
+</th><tr></thead>
+<tr><td>[1] "raw_timestamp_part_1"  </td><td> "raw_timestamp_part_2"  </td><td> "cvtd_timestamp"      </td></tr>
+<tr><td> [4] "roll_forearm"          </td><td> "pitch_forearm"        </td><td>  "new_window"          </td></tr>
+ <tr><td>[7] "num_window"           </td><td>  "roll_belt"            </td><td>  "pitch_belt"          </td></tr>
+<tr><td>[10] "yaw_belt"             </td><td>  "total_accel_belt"      </td><td> "gyros_belt_x"       </td></tr>
+<tr><td>[13] "gyros_belt_y"         </td><td>  "gyros_belt_z"          </td><td> "yaw_forearm"        </td></tr>
+<tr><td>[16] "total_accel_forearm"  </td><td>  "total_accel_dumbbell"  </td><td> "accel_belt_x"        </td></tr>
+<tr><td>[19] "accel_belt_y"         </td><td>  "accel_belt_z"          </td><td> "magnet_belt_x"       </td></tr>
+<tr><td>[22] "magnet_belt_y"        </td><td>  "accel_arm_z"          </td><td>  "magnet_arm_x"        </td></tr>
+<tr><td>[25] "magnet_belt_z"        </td><td>  "roll_arm"             </td><td>  "roll_dumbbell"       </td></tr>
+<tr><td>[28] "pitch_dumbbell"       </td><td>  "pitch_arm"            </td><td>  "yaw_arm"            </td></tr>
+<tr><td>[31] "total_accel_arm"      </td><td>  "gyros_arm_x"          </td><td>  "gyros_arm_y"        </td></tr>
+<tr><td>[34] "gyros_arm_z"          </td><td>  "accel_arm_x"          </td><td>  "accel_arm_y"         </td></tr>
+<tr><td>[37] "magnet_arm_y"        </td><td>   "magnet_arm_z"         </td><td>  "gyros_dumbbell_x"    </td></tr>
+<tr><td>40] "gyros_dumbbell_y"      </td><td> "gyros_dumbbell_z"      </td><td> "accel_dumbbell_x"    </td></tr>
+<tr><td>[43] "accel_dumbbell_y"    </td><td>   "accel_dumbbell_z"     </td><td>  "magnet_dumbbell_x"  </td></tr>
+<tr><td>[46] "magnet_dumbbell_y"   </td><td>   "magnet_dumbbell_z"    </td><td>  "yaw_dumbbell"        </td></tr>
+<tr><td>[49] "gyros_forearm_x"      </td><td>  "gyros_forearm_y"       </td><td> "gyros_forearm_z"    </td></tr>
+<tr><td>[52] "accel_forearm_x"      </td><td>  "accel_forearm_y"      </td><td>  "accel_forearm_z"     </td></tr>
+<tr><td>[55] "magnet_forearm_x"     </td><td>  "magnet_forearm_y"     </td><td>  "magnet_forearm_z"    </td></tr>
+<tr><td>[58] "classe"   </td></tr>
+</table>
+<br/>
+ </div>
 
 
 </div>
